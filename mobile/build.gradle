@@ -7,7 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "dev.dizel.testwatchapp"
+        applicationId "dev.dizel.discordintegration"
         minSdk 30
         targetSdk 32
         versionCode 1

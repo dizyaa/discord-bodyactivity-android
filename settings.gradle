@@ -6,7 +6,7 @@ dependencyResolutionManagement {
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
-rootProject.name = "TestWatchApp"
+rootProject.name = "DiscordIntegrationApp"
 include ':mobile'
 include ':wear'
 include ':shared'

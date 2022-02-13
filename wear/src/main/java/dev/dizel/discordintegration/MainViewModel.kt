@@ -1,4 +1,4 @@
-package dev.dizel.testwatchapp
+package dev.dizel.discordintegration
 
 import androidx.lifecycle.ViewModel
 
