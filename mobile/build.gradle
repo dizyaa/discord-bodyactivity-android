@@ -10,8 +10,8 @@ android {
         applicationId "dev.dizel.discordintegration"
         minSdk 30
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(BUILD_CODE)
+        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,5 +64,4 @@ dependencies {
     implementation "androidx.activity:activity-compose:$compose_version"
 
     wearApp project(":wear")
-    implementation project(":shared")
 }
