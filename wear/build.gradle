@@ -22,21 +22,47 @@ android {
         }
     }
     buildFeatures {
-        viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.5'
     }
 }
 
 dependencies {
-    implementation 'androidx.health:health-services-client:1.0.0-alpha03'
-    // For Kotlin, this library helps bridge between Futures and coroutines.
+    def wear_version = "1.2.0"
+
     implementation "com.google.guava:guava:30.1.1-android"
+
     implementation "androidx.concurrent:concurrent-futures-ktx:1.1.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
-    implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.wear:wear:1.1.0'
+    implementation "androidx.wear:wear:$wear_version"
+
+    implementation 'androidx.health:health-services-client:1.0.0-alpha03'
+    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
+
+    //compose
+    def compose_version = "1.1.0"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.activity:activity-compose:$compose_version"
+
+    // compose tooling
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    //compose wear
+    def compose_wear_version = "1.0.0-alpha16"
+    implementation "androidx.wear.compose:compose-material:$compose_wear_version"
+    implementation "androidx.wear.compose:compose-foundation:$compose_wear_version"
+    implementation "androidx.wear.compose:compose-navigation:$compose_wear_version"
+
     wearApp project(":wear")
 }

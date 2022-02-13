@@ -1,22 +1,20 @@
 package dev.dizel.testwatchapp
 
-import android.app.Activity
 import android.os.Bundle
-import androidx.health.services.client.HealthServices
-import dev.dizel.testwatchapp.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.wear.compose.material.Text
 
-class MainActivity : Activity() {
+class MainActivity: ComponentActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val healthClient = HealthServices.getClient(this)
-        val passiveMonitoringClient = healthClient.passiveMonitoringClient
-
+        setContent {
+            Text(text = "Text")
+        }
     }
 }
