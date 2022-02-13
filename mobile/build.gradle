@@ -64,4 +64,5 @@ dependencies {
     implementation "androidx.activity:activity-compose:$compose_version"
 
     wearApp project(":wear")
+    implementation project(":shared")
 }

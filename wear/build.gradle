@@ -12,7 +12,6 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
     }
 
     buildTypes {
@@ -65,4 +64,5 @@ dependencies {
     implementation "androidx.wear.compose:compose-navigation:$compose_wear_version"
 
     wearApp project(":wear")
+    implementation project(":shared")
 }
