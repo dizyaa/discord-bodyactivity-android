@@ -3,6 +3,11 @@
     package="dev.dizel.discordintegration">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -10,6 +15,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".MainApplication"
         android:supportsRtl="true">
         <uses-library
             android:name="com.google.android.wearable"
@@ -33,6 +39,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".BackgroundDataReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="hs.passivemonitoring.DATA" />
+            </intent-filter>
+        </receiver>
     </application>
 
     <queries>
