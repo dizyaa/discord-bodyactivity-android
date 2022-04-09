@@ -1,31 +1,29 @@
-package dev.dizel.discordintegration
+package dev.dizel.discordintegration.view
 
 import android.Manifest
-import android.content.ComponentName
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.concurrent.futures.await
-import androidx.core.app.ActivityCompat
-import androidx.health.services.client.HealthServices
-import androidx.health.services.client.data.DataType
-import androidx.health.services.client.data.PassiveMonitoringConfig
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.wear.compose.material.Text
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import dev.dizel.discordintegration.data.RegisterForPassiveDataWorker
+import dev.dizel.discordintegration.vm.MainViewModel
 import kotlin.math.absoluteValue
 
 class MainActivity: ComponentActivity() {
@@ -36,26 +34,30 @@ class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent { PreviewScreen() }
-
         requestPermissions(
             listOf(
                 Manifest.permission.BODY_SENSORS,
                 Manifest.permission.ACTIVITY_RECOGNITION
             )
         )
+
+        setContent { MainScreen(viewModel) }
     }
 
     private fun requestPermissions(permissions: List<String>) {
         permissionToCodeList.clear()
 
-        permissions.map { permission ->
+        val permissionsDenied = permissions.filter { permission ->
+            checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (permissionsDenied.isEmpty()) registerHealthMonitor()
+
+        permissionsDenied.forEach { permission ->
             val code = permission.hashCode().absoluteValue
             permissionToCodeList += permission to code
 
-            if (checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(arrayOf(permission), code)
-            }
+            requestPermissions(arrayOf(permission), code)
         }
     }
 
@@ -64,6 +66,8 @@ class MainActivity: ComponentActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        if (grantResults.isEmpty()) return
+
         val permission = permissionToCodeList.find {
             requestCode == it.second
         } ?: return
@@ -71,7 +75,7 @@ class MainActivity: ComponentActivity() {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             permissionToCodeList.remove(permission)
         } else {
-            finish() // destroy app
+            finish()
         }
 
         if (permissionToCodeList.isEmpty()) {
@@ -80,36 +84,39 @@ class MainActivity: ComponentActivity() {
     }
 
     private fun registerHealthMonitor() {
-        val dataTypes = setOf(DataType.HEART_RATE_BPM, DataType.STEPS)
-        val config = PassiveMonitoringConfig.builder()
-            .setDataTypes(dataTypes)
-            .setComponentName(ComponentName(this, BackgroundDataReceiver::class.java))
-            .setShouldIncludeUserActivityState(true)
-            .build()
-        lifecycleScope.launch {
-            HealthServices.getClient(this@MainActivity)
-                .passiveMonitoringClient
-                .registerDataCallback(config)
-                .await()
+        Log.d("HealthMonitor", "Starting..")
+
+        WorkManager.getInstance(this).enqueue(
+            OneTimeWorkRequestBuilder<RegisterForPassiveDataWorker>().build()
+        )
+    }
+}
+
+
+@Composable
+fun MainScreen(
+    viewModel: MainViewModel = viewModel()
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Black)
+    ) {
+        val report = viewModel.report.collectAsState().value
+
+        Column(Modifier.align(Alignment.Center)) {
+            Text(text = "HB: ${report.heartRate}", fontSize = 40.sp)
+            Text(text = "SP: ${report.steps}", fontSize = 40.sp)
         }
     }
 }
 
 @Preview(
-    widthDp = 500,
-    heightDp = 500,
+    widthDp = 200,
+    heightDp = 200,
     showBackground = true
 )
 @Composable
-private fun PreviewScreen() {
-    Column(
-        modifier = CombinedModifier(
-            Modifier.fillMaxSize(),
-            Modifier.background(color = Color.DarkGray)
-        ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-
-    }
+private fun MainScreenPreview() {
+    MainScreen()
 }

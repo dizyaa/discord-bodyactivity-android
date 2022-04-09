@@ -35,7 +35,9 @@ dependencies {
     implementation "com.google.guava:guava:30.1.1-android"
 
     implementation "androidx.concurrent:concurrent-futures-ktx:1.1.0"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -50,7 +52,6 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.foundation:foundation:$compose_version"
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.activity:activity-compose:$compose_version"
 
     // compose tooling
@@ -62,6 +63,19 @@ dependencies {
     implementation "androidx.wear.compose:compose-material:$compose_wear_version"
     implementation "androidx.wear.compose:compose-foundation:$compose_wear_version"
     implementation "androidx.wear.compose:compose-navigation:$compose_wear_version"
+
+
+    def work_version = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation "androidx.work:work-multiprocess:$work_version"
+
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    //Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
 
     wearApp project(":wear")
 }

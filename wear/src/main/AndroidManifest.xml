@@ -15,22 +15,19 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".MainApplication"
+        android:usesCleartextTraffic="true"
+        android:name=".core.MainApplication"
         android:supportsRtl="true">
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
 
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
         <activity
-            android:name="dev.dizel.discordintegration.MainActivity"
+            android:name="dev.dizel.discordintegration.view.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -41,10 +38,18 @@
         </activity>
 
         <receiver
-            android:name=".BackgroundDataReceiver"
+            android:name=".data.HealthServiceDataReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="hs.passivemonitoring.DATA" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".data.StartupReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
