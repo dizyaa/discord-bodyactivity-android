@@ -12,6 +12,7 @@ android {
         targetSdk 32
         versionCode Integer.parseInt(BUILD_CODE)
         versionName VERSION_NAME
+        buildConfigField "String", "BASE_URL", BASE_URL
     }
 
     buildTypes {
