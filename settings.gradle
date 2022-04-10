@@ -7,5 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "DiscordIntegrationApp"
-include ':mobile'
 include ':wear'
